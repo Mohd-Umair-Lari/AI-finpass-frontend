@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinPass AI | Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <div class="container">
@@ -12,6 +12,6 @@
         <div id="dashboard-content"></div>
         <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
-    <script src="{{ url_for('js', filename='dashboard.js') }}"></script>
+    <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
