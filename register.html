@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register | FinPass AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wizard">
+    <h1 style="text-align:center; margin-bottom:8px;">Create Your FinPass</h1>
+    <p style="text-align:center; color:#6b7280; margin-bottom:18px;">Step-by-step <br> fill profile, goals, financials, investments and progress</p>
+
+    <div class="progress" id="progressDots">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <!-- Step 1: Profile -->
+    <div class="step active" id="step-1">
+      <h2>Profile</h2>
+      <div class="grid-2">
+        <div>
+          <label for="r-name">Full name</label>
+          <input id="r-name" type="text" placeholder="Your Name" />
+        </div>
+        <div>
+          <label for="r-age">Age</label>
+          <input id="r-age" type="number" placeholder="Age" />
+        </div>
+
+        <div>
+          <label for="r-email">Email</label>
+          <input id="r-email" type="email" placeholder="email" />
+        </div>
+        <div>
+          <label for="r-password">Password</label>
+          <input id="r-password" type="password" placeholder="make a password" />
+        </div>
+
+        <div style="grid-column: 1 / -1;">
+          <label for="r-status">Employment status</label>
+          <select id="r-status">
+            <option value="">- Choose -</option>
+            <option>Salaried</option>
+            <option>Self-Employed</option>
+            <option>Freelancer</option>
+            <option>Unemployed</option>
+          </select>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn ghost" onclick="cancelRegister()">Cancel</button>
+        <div>
+          <button class="btn primary" onclick="nextStep()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Goal -->
+    <div class="step" id="step-2">
+      <h2>Goal</h2>
+      <div class="grid-2">
+        <div>
+          <label for="g-name">Goal name</label>
+          <input id="g-name" type="text" placeholder="Buy a house / Retirement / Vacation" />
+        </div>
+        <div>
+          <label for="g-amt">Target amount (INR)</label>
+          <input id="g-amt" type="number" placeholder="amount"/>
+        </div>
+        <div>
+          <label for="g-time">Target time (years)</label>
+          <input id="g-time" type="number" placeholder="years" />
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn ghost" onclick="prevStep()">Back</button>
+        <div>
+          <button class="btn primary" onclick="nextStep()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Financials -->
+    <div class="step" id="step-3">
+      <h2>Financials</h2>
+      <div class="grid-2">
+        <div>
+          <label for="f-income">Monthly income</label>
+          <input id="f-income" type="number" placeholder="Income" />
+        </div>
+        <div>
+          <label for="f-expenses">Monthly expenses</label>
+          <input id="f-expenses" type="number" placeholder="expenses" />
+        </div>
+        <div>
+          <label for="f-savings">Monthly savings</label>
+          <input id="f-savings" type="number" placeholder="15000" />
+        </div>
+        <div>
+          <label for="f-debt">Outstanding debt (total)</label>
+          <input id="f-debt" type="number" placeholder="0" />
+        </div>
+        <div style="grid-column:1 / -1;">
+          <label><input id="f-emfund" type="checkbox" /> Opt-in Emergency Fund</label>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn ghost" onclick="prevStep()">Back</button>
+        <div>
+          <button class="btn primary" onclick="nextStep()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Investments -->
+    <div class="step" id="step-4">
+      <h2>Investments</h2>
+      <div class="grid-2">
+        <div>
+          <label for="i-risk">Risk option</label>
+          <select id="i-risk">
+            <option>Low</option>
+            <option selected>Moderate</option>
+            <option>High</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-mode">Preferred mode</label>
+          <select id="i-mode">
+            <option>SIP</option>
+            <option>Lump Sum</option>
+            <option>Stocks</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-amt">Planned investment amount (monthly)</label>
+          <input id="i-amt" type="number" placeholder="5000" />
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn ghost" onclick="prevStep()">Back</button>
+        <div>
+          <button class="btn primary" onclick="nextStep()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Progress (auto-adjust, tenure, ROR) -->
+    <div class="step" id="step-5">
+      <h2>Progress / Automation</h2>
+      <div class="grid-2">
+        <div>
+          <label for="p-start">Start date</label>
+          <input id="p-start" type="date" />
+        </div>
+        <div>
+          <label for="p-tenure">Tenure (years)</label>
+          <input id="p-tenure" type="number" placeholder="5" />
+        </div>
+        <div>
+          <label for="p-ror">Expected ROR (%)</label>
+          <input id="p-ror" type="number" step="0.1" placeholder="8.5" />
+        </div>
+        <div style="grid-column:1 / -1;">
+          <label><input id="p-auto" type="checkbox" /> Auto-adjust investments under volatility</label>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn ghost" onclick="prevStep()">Back</button>
+        <div>
+          <button class="btn primary" onclick="showReview()">Review & Create</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: Review -->
+    <div class="step" id="step-6">
+      <h2>Review & Create</h2>
+      <div class="review" id="review-area">
+        <!-- JSON preview will be injected here -->
+      </div>
+      <div class="controls">
+        <button class="btn ghost" onclick="prevStep()">Back</button>
+        <div>
+          <button class="btn primary" onclick="submitRegistration()">Create Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('js', filename='register.js') }}"></script>
+</body>
+</html>
