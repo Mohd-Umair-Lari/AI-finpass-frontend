@@ -45,7 +45,7 @@ async function loadDashboard() {
 
 /* GOAL INTELLIGENCE */
 async function loadGoal() {
-  const data = await fetchJSON(`/api/goal-intelligence/${encodeURIComponent(user.email)}`);
+  const data = await apiFetch("/api/goal-intelligence/...")
   const g = data.goal_intelligence;
 
   document.getElementById("goal-content").innerHTML = `
