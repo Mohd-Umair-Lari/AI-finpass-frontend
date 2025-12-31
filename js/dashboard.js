@@ -1,4 +1,4 @@
-import { fetchJSON } from "./api.js";
+import { apiFetch } from "./api.js";
 
 const user = JSON.parse(localStorage.getItem("user"));
 if (!user) {
