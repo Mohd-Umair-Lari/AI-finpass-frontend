@@ -1,11 +1,8 @@
-const API_BASE =
-  location.hostname === "localhost"
-    ? "http://127.0.0.1:5000"
-    : "https://ai-finpass-backend.onrender.com";
+// js/api.js
+const API_BASE = "https://ai-finpass-backend.onrender.com";
 
-/* Core fetch */
-async function apiFetch(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
+export async function fetchJSON(path, options = {}) {
+  const response = await fetch(API_BASE + path, {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {})
@@ -13,15 +10,11 @@ async function apiFetch(path, options = {}) {
     ...options
   });
 
-  const data = await res.json();
-  if (!res.ok) throw data;
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data;
+  }
+
   return data;
 }
-
-/* 🔥 COMPATIBILITY LAYER — THIS SAVES YOUR APP */
-export async function fetchJSON(path, options = {}) {
-  return apiFetch(path, options);
-}
-
-/* Optional direct export if needed later */
-export { apiFetch };

@@ -1,50 +1,24 @@
-console.log("🔥 login.js loaded");
+import { fetchJSON } from "./api.js";
 
-import { apiFetch } from "./api.js";
+console.log("login.js loaded");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("loginForm");
+const loginBtn = document.getElementById("login-btn");
 
-  if (!loginForm) {
-    console.warn("⚠️ loginForm not found on this page");
-    return;
+loginBtn.addEventListener("click", async () => {
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+
+  try {
+    const res = await fetchJSON("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password })
+    });
+
+    localStorage.setItem("user", JSON.stringify(res.user));
+    window.location.href = "/dashboard.html";
+
+  } catch (err) {
+    alert(err.message || "Login failed");
+    console.error(err);
   }
-
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("🖱️ Login form submitted");
-
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-
-    if (!emailInput || !passwordInput) {
-      alert("Login inputs missing in HTML");
-      return;
-    }
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (!email || !password) {
-      alert("Please enter email and password");
-      return;
-    }
-
-    try {
-      const result = await apiFetch("/api/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (result.status === "success") {
-        localStorage.setItem("user", JSON.stringify(result.user));
-        window.location.href = "/dashboard.html";
-      } else {
-        alert(result.message || "Login failed");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      alert("Unable to login. Check backend.");
-    }
-  });
 });
