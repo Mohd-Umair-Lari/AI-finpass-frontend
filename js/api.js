@@ -1,8 +1,7 @@
-// js/api.js
-const API_BASE = "https://ai-finpass-backend.onrender.com";
+const BASE_URL = "https://ai-finpass-backend.onrender.com";
 
-export async function fetchJSON(path, options = {}) {
-  const response = await fetch(API_BASE + path, {
+export async function apiFetch(endpoint, options = {}) {
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {})
@@ -10,11 +9,7 @@ export async function fetchJSON(path, options = {}) {
     ...options
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw data;
-  }
-
+  const data = await res.json();
+  if (!res.ok) throw data;
   return data;
 }
