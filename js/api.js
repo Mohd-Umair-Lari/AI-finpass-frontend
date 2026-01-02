@@ -10,6 +10,6 @@ export async function apiFetch(endpoint, options = {}) {
   });
 
   const data = await res.json();
-  if (!res.ok) throw data;
+  if (!res.ok) throw new Error(data.message || "API Error");
   return data;
 }
