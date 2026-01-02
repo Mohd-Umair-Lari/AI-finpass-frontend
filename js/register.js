@@ -33,7 +33,10 @@ btn.addEventListener("click", async () => {
     // save user session
     localStorage.setItem("user", JSON.stringify(res.user));
 
-    // go to dashboard
+    // go to wizard
+    window.location.href = "/wizard.html";
+
+    // got to dashboard
     window.location.href = "/dashboard.html";
 
   } catch (err) {
