@@ -1,95 +1,93 @@
 import { apiFetch } from "./api.js";
 
-/* ===== AUTH GUARD ===== */
-const user = JSON.parse(localStorage.getItem("user"));
-if (!user || !user.email) {
-  window.location.href = "/login.html";
+console.log("🔥 dashboard.js loaded");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    alert("Please login first");
+    window.location.href = "/";
+    return;
+  }
+
+  // -------------------------
+  // BASIC PROFILE
+  // -------------------------
+  setText("profile-name", user.Name);
+  setText("profile-email", user.email);
+  setText("profile-age", user.Age);
+  setText("profile-status", user["employement-status"]);
+
+  // -------------------------
+  // GOAL
+  // -------------------------
+  setText("goal-name", user.Goal?.goal);
+  setText("goal-amount", extract(user.Goal?.["target-amt"]));
+  setText("goal-time", extract(user.Goal?.["target-time"]));
+
+  // -------------------------
+  // FINANCIALS
+  // -------------------------
+  setText("income", extract(user.financials?.["monthly-income"]));
+  setText("expenses", extract(user.financials?.["monthly-expenses"]));
+  setText("savings", user.financials?.monthly_savings);
+  setText("debt", extract(user.financials?.debt));
+  setText("emergency", user.financials?.["em-fund-opted"] ? "Yes" : "No");
+
+  // -------------------------
+  // INVESTMENTS
+  // -------------------------
+  setText("risk", user.investments?.["risk-opt"]);
+  setText("mode", user.investments?.["prefered-mode"]);
+  setText("invest-amt", extract(user.investments?.["invest-amt"]));
+
+  // -------------------------
+  // PROGRESS
+  // -------------------------
+  setText("ror", extract(user.progress?.ROR) + "%");
+  setText("tenure", extract(user.progress?.tenure));
+  setText("start-date", user.progress?.start_date);
+  setText("auto-adjust", user.progress?.["auto-adjust"] ? "Enabled" : "Disabled");
+
+  // -------------------------
+  // BUTTONS
+  // -------------------------
+  bindButtons(user.email);
+});
+
+// -----------------------------
+// HELPERS
+// -----------------------------
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value ?? "-";
 }
 
-/* ===== DOM HELPERS ===== */
-const qs = (id) => document.getElementById(id);
-const setText = (id, val) => qs(id).textContent = val ?? "-";
-
-/* ===== POPULATE USER ===== */
-async function loadUserProfile() {
-  const data = await apiFetch(`/api/user/${encodeURIComponent(user.email)}`);
-  const u = data.user;
-
-  setText("name", u.Name);
-  setText("email", u.email);
-  setText("age", u.Age);
-  setText("status", u["employement-status"]);
-
-  setText("goal-name", u.Goal?.goal);
-  setText("goal-amount", u.Goal?.["target-amt"]);
-  setText("goal-time", u.Goal?.["target-time"]);
-
-  setText("income", u.financials?.["monthly-income"]);
-  setText("expenses", u.financials?.["monthly-expenses"]);
-  setText("savings", u.financials?.monthly_savings);
-  setText("debt", u.financials?.debt);
-  setText("emfund", u.financials?.["em-fund-opted"] ? "Yes" : "No");
-
-  setText("risk", u.investments?.["risk-opt"]);
-  setText("mode", u.investments?.["prefered-mode"]);
-  setText("invest-amt", u.investments?.["invest-amt"]);
-
-  setText("ror", u.progress?.ROR + "%");
-  setText("tenure", u.progress?.tenure + " months");
-  setText("start", u.progress?.start_date);
-  setText("auto", u.progress?.["auto-adjust"] ? "Enabled" : "Disabled");
+function extract(v) {
+  if (!v) return "-";
+  if (typeof v === "object") return Object.values(v)[0];
+  return v;
 }
 
-/* ===== GOAL INTELLIGENCE ===== */
-async function loadGoalIntelligence() {
-  const res = await apiFetch(`/api/goal-intelligence/${user.email}`);
-  const g = res.goal_intelligence;
+function bindButtons(email) {
+  document.getElementById("btn-analytics")?.addEventListener("click", async () => {
+    const data = await apiFetch(`/api/analytics/${email}`);
+    alert(JSON.stringify(data.analytics, null, 2));
+  });
 
-  qs("goal-modal-body").innerHTML = `
-    <p><b>Goal Probability:</b> ${g.goal_probability}%</p>
-    <p><b>Expected Corpus:</b> ₹${g.expected_corpus}</p>
-    <p><b>Target Amount:</b> ₹${g.target_amount}</p>
-    <p><b>Gap:</b> ₹${g.gap}</p>
-    <p><b>Risk Level:</b> ${g.risk_level}</p>
-    <p><b>Assumed ROI:</b> ${g.roi_assumed}%</p>
-  `;
+  document.getElementById("btn-goal")?.addEventListener("click", async () => {
+    const data = await apiFetch(`/api/goal-intelligence/${email}`);
+    alert(JSON.stringify(data.goal_intelligence, null, 2));
+  });
+
+  document.getElementById("btn-agent")?.addEventListener("click", async () => {
+    const data = await apiFetch(`/api/agent/${email}`);
+    alert(JSON.stringify(data.agent, null, 2));
+  });
 }
 
-/* ===== AI AGENT ===== */
-async function loadAgentDecision() {
-  const res = await apiFetch(`/api/agent/${user.email}`);
-  const { agent, goal_intelligence } = res;
-
-  qs("agent-modal-body").innerHTML = `
-    <span class="agent-badge ${agent.action.toLowerCase()}">
-      ${agent.action}
-    </span>
-    <p>${agent.message}</p>
-    <p><b>Goal Probability:</b> ${goal_intelligence.goal_probability}%</p>
-  `;
-}
-
-/* ===== MODALS ===== */
-qs("open-goal").onclick = async () => {
-  qs("goal-modal").classList.remove("hidden");
-  await loadGoalIntelligence();
-};
-
-qs("open-agent").onclick = async () => {
-  qs("agent-modal").classList.remove("hidden");
-  await loadAgentDecision();
-};
-
-document.querySelectorAll(".modal-close").forEach(btn =>
-  btn.onclick = () =>
-    btn.closest(".modal-backdrop").classList.add("hidden")
-);
-
-/* ===== LOGOUT ===== */
 window.logout = () => {
   localStorage.removeItem("user");
-  window.location.href = "/login.html";
+  window.location.href = "/";
 };
-
-/* ===== INIT ===== */
-loadUserProfile();
