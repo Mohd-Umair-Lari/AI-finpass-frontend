@@ -6,29 +6,81 @@
   <title>FinPass AI | Dashboard</title>
   <link rel="stylesheet" href="./css/style.css" />
 </head>
+
 <body>
   <div class="container dashboard-container">
+
     <h1>User Dashboard</h1>
 
-    <div class="card">
-      <h2>User Profile</h2>
-      <p><b>Name:</b> <span id="user-name">-</span></p>
-      <p><b>Email:</b> <span id="user-email">-</span></p>
+    <!-- ROW 1 -->
+    <div class="grid">
+
+      <!-- USER PROFILE -->
+      <div class="card">
+        <h2>User Profile</h2>
+        <p><b>Name:</b> <span id="u-name">-</span></p>
+        <p><b>Email:</b> <span id="u-email">-</span></p>
+        <p><b>Age:</b> <span id="u-age">-</span></p>
+        <p><b>Status:</b> <span id="u-status">-</span></p>
+      </div>
+
+      <!-- GOAL -->
+      <div class="card">
+        <h2>Goal</h2>
+        <p><b>Goal:</b> <span id="g-name">-</span></p>
+        <p><b>Target Amount:</b> <span id="g-amount">-</span></p>
+        <p><b>Target Time:</b> <span id="g-time">-</span></p>
+      </div>
+
     </div>
 
-    <div class="card actions">
-      <button id="goal-btn" class="primary-btn">
-        Goal Intelligence
-      </button>
+    <!-- ROW 2 -->
+    <div class="grid">
 
-      <button id="agent-btn" class="primary-btn">
-        AI Decision
-      </button>
+      <!-- FINANCIALS -->
+      <div class="card">
+        <h2>Financials</h2>
+        <p><b>Monthly Income:</b> <span id="f-income">-</span></p>
+        <p><b>Monthly Expenses:</b> <span id="f-expenses">-</span></p>
+        <p><b>Monthly Savings:</b> <span id="f-savings">-</span></p>
+        <p><b>Debt:</b> <span id="f-debt">-</span></p>
+        <p><b>Emergency Fund:</b> <span id="f-emergency">-</span></p>
+      </div>
+
+      <!-- INVESTMENTS -->
+      <div class="card">
+        <h2>Investments</h2>
+        <p><b>Risk:</b> <span id="i-risk">-</span></p>
+        <p><b>Mode:</b> <span id="i-mode">-</span></p>
+        <p><b>Amount:</b> <span id="i-amount">-</span></p>
+      </div>
+
     </div>
 
-    <button id="logout-btn" class="logout-btn">
-      Logout
-    </button>
+    <!-- ROW 3 -->
+    <div class="grid">
+
+      <!-- PROGRESS -->
+      <div class="card">
+        <h2>Progress</h2>
+        <p><b>ROR:</b> <span id="p-ror">-</span></p>
+        <p><b>Tenure:</b> <span id="p-tenure">-</span></p>
+        <p><b>Start Date:</b> <span id="p-start">-</span></p>
+        <p><b>Auto Adjust:</b> <span id="p-auto">-</span></p>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="card actions">
+        <button id="btn-analytics">View Financial Analytics</button>
+        <button id="btn-goal">View Goal Intelligence</button>
+        <button id="btn-agent">AI Decision Advisor</button>
+      </div>
+
+    </div>
+
+    <!-- LOGOUT -->
+    <button id="btn-logout" class="logout-btn">Logout</button>
+
   </div>
 
   <script type="module" src="./js/dashboard.js"></script>
