@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinPass AI | Dashboard</title>
-    <link rel="stylesheet" href="./css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinPass AI | Dashboard</title>
+  <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>User Dashboard</h1>
-        <div id="dashboard-content"></div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+  <div class="container dashboard-container">
+    <h1>User Dashboard</h1>
+
+    <div class="card">
+      <h2>User Profile</h2>
+      <p><b>Name:</b> <span id="user-name">-</span></p>
+      <p><b>Email:</b> <span id="user-email">-</span></p>
     </div>
-    <script type="module" src="./js/dashboard.js"></script>
+
+    <div class="card actions">
+      <button id="goal-btn" class="primary-btn">
+        Goal Intelligence
+      </button>
+
+      <button id="agent-btn" class="primary-btn">
+        AI Decision
+      </button>
+    </div>
+
+    <button id="logout-btn" class="logout-btn">
+      Logout
+    </button>
+  </div>
+
+  <script type="module" src="./js/dashboard.js"></script>
 </body>
 </html>
