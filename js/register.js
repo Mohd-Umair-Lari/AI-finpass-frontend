@@ -36,9 +36,6 @@ btn.addEventListener("click", async () => {
     // go to wizard
     window.location.href = "/wizard.html";
 
-    // got to dashboard
-    window.location.href = "/dashboard.html";
-
   } catch (err) {
     alert(err.message || "Registration failed");
     console.error(err);
