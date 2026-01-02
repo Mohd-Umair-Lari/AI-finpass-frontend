@@ -83,6 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+document.getElementById("btn-goal")
+  ?.addEventListener("click", () => loadGoalIntelligence(user.email));
+
+document.getElementById("btn-agent")
+  ?.addEventListener("click", () => loadAgentDecision(user.email));
+
+document.getElementById("btn-analytics")
+  ?.addEventListener("click", () => loadAnalytics(user.email));
+
   if (!user) {
     alert("Please login first");
     window.location.href = "/";
@@ -132,14 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // BUTTONS
   // -------------------------
   bindButtons(user.email);
-  document.getElementById("btn-goal")
-    ?.addEventListener("click", () => loadGoalIntelligence(user.email));
-
-  document.getElementById("btn-agent")
-    ?.addEventListener("click", () => loadAgentDecision(user.email));
-
-  document.getElementById("btn-analytics")
-    ?.addEventListener("click", () => loadAnalytics(user.email));
 
 });
 
