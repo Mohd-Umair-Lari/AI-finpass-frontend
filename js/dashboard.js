@@ -2,6 +2,84 @@ import { apiFetch } from "./api.js";
 
 console.log("🔥 dashboard.js loaded");
 
+function openModal(html) {
+  const backdrop = document.getElementById("modal-backdrop");
+  const content = document.getElementById("modal-content");
+
+  content.innerHTML = html;
+  backdrop.classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("modal-backdrop").classList.add("hidden");
+}
+
+async function loadGoalIntelligence(email) {
+  const res = await fetch(`${API_BASE}/api/goal-intelligence/${email}`);
+  const data = await res.json();
+
+  const g = data.goal_intelligence;
+
+  openModal(`
+    <h2>Goal Intelligence</h2>
+    <p><b>Goal Probability:</b> ${g.goal_probability}%</p>
+    <p><b>Expected Corpus:</b> ₹${g.expected_corpus}</p>
+    <p><b>Target Amount:</b> ₹${g.target_amount}</p>
+    <p><b>Gap:</b> ₹${Math.abs(g.gap)}</p>
+    <hr/>
+    <p><b>Risk Level:</b> ${g.risk_level}</p>
+    <p><b>Assumed ROI:</b> ${g.roi_assumed}%</p>
+    <p class="decision-badge ${g.goal_probability >= 70 ? "good" : "bad"}">
+      ${g.verdict}
+    </p>
+  `);
+}
+
+async function loadAgentDecision(email) {
+  const res = await fetch(`${API_BASE}/api/agent/${email}`);
+  const data = await res.json();
+
+  const a = data.agent;
+  const g = data.goal_intelligence;
+
+  openModal(`
+    <h2>AI Decision Advisor</h2>
+
+    <span class="agent-badge ${a.action.toLowerCase()}">
+      ${a.action}
+    </span>
+
+    <p class="agent-message">${a.message}</p>
+
+    <hr/>
+    <p><b>Reason:</b> ${g.verdict}</p>
+    <p><b>Goal Probability:</b> ${g.goal_probability}%</p>
+  `);
+}
+
+
+async function loadAnalytics(email) {
+  const res = await fetch(`${API_BASE}/api/analytics/${email}`);
+  const data = await res.json();
+  const a = data.analytics;
+
+  openModal(`
+    <h2>Financial Analytics</h2>
+    <p><b>Financial Health:</b> ${a.financial_health}</p>
+    <p><b>Savings Ratio:</b> ${(a.savings_ratio * 100).toFixed(1)}%</p>
+    <p><b>Expense Ratio:</b> ${(a.expense_ratio * 100).toFixed(1)}%</p>
+    <p><b>Risk Score:</b> ${a.risk_score}</p>
+  `);
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("modal-close")?.addEventListener("click", closeModal);
+  document.getElementById("modal-backdrop")?.addEventListener("click", (e) => {
+    if (e.target.id === "modal-backdrop") closeModal();
+  });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -54,6 +132,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // BUTTONS
   // -------------------------
   bindButtons(user.email);
+  document.getElementById("btn-goal")
+    ?.addEventListener("click", () => loadGoalIntelligence(user.email));
+
+  document.getElementById("btn-agent")
+    ?.addEventListener("click", () => loadAgentDecision(user.email));
+
+  document.getElementById("btn-analytics")
+    ?.addEventListener("click", () => loadAnalytics(user.email));
+
 });
 
 // -----------------------------
