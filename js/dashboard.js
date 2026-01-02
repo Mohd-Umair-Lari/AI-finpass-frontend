@@ -53,15 +53,26 @@ async function loadGoalIntelligence(email) {
 
 async function loadAgentDecision(email) {
   const data = await apiFetch(`/api/agent/${email}`);
-  const a = data.agent;
+
+  const a = data.decision;   // ✅ correct key
+  const reason = data.reason;
+
+  const actionClass = a.action ? a.action.toLowerCase() : "hold";
 
   openModal(`
     <h2>AI Decision Advisor</h2>
-    <span class="agent-badge ${a.action.toLowerCase()}">${a.action}</span>
+
+    <span class="agent-badge ${actionClass}">
+      ${a.action}
+    </span>
+
     <p class="agent-message">${a.message}</p>
-    <p class="agent-reason">${data.reason}</p>
+
+    <hr/>
+    <p class="agent-reason"><b>Reason:</b> ${reason}</p>
   `);
 }
+
 
 /* =========================
    PAGE INIT
