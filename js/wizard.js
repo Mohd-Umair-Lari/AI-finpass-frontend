@@ -3,6 +3,26 @@ import { apiFetch } from "./api.js";
 let step = 0;
 const steps = document.querySelectorAll(".step");
 const dots = document.querySelectorAll(".dot");
+const params = new URLSearchParams(window.location.search);
+const isResume = params.get("resume") === "true";
+
+async function loadResumeState() {
+  if (!isResume) return;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user?.email) return;
+
+  try {
+    const res = await apiFetch(`/api/onboarding/status/${user.email}`);
+
+    if (res.current_step !== null && typeof res.current_step === "number") {
+      step = res.current_step;
+      show();
+    }
+  } catch (err) {
+    console.error("Failed to resume onboarding", err);
+  }
+}
 
 function show() {
   steps.forEach((s, i) => s.classList.toggle("active", i === step));
@@ -10,11 +30,23 @@ function show() {
 }
 
 show();
+loadResumeState();
+
+function persistStep() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user?.email) return;
+
+  apiFetch(`/api/onboarding/start`, {
+    method: "POST",
+    body: JSON.stringify({ email: user.email })
+  }).catch(() => {});
+}
 
 window.next = () => {
   if (step < steps.length - 1) {
     step++;
     show();
+    persistStep();
   }
 };
 
@@ -22,6 +54,7 @@ window.prev = () => {
   if (step > 0) {
     step--;
     show();
+    persistStep();
   }
 };
 

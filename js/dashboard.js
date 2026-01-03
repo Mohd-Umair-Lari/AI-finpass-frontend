@@ -1,5 +1,5 @@
 import { apiFetch } from "./api.js";
-
+const user = JSON.parse(localStorage.getItem("user"));
 console.log("🔥 dashboard.js loaded");
 
 function openModal(html) {
@@ -12,6 +12,28 @@ function openModal(html) {
 function closeModal() {
   document.getElementById("modal-backdrop").classList.add("hidden");
 }
+
+async function checkOnboardingStatus() {
+  if (!user?.email) return;
+
+  try {
+    const res = await apiFetch(`/api/onboarding/status/${user.email}`);
+
+    if (res.status === "cancelled" || res.status === "in_progress") {
+      document.getElementById("resume-onboarding-container").style.display = "block";
+
+      document
+        .getElementById("resume-onboarding-btn")
+        .addEventListener("click", () => {
+          window.location.href = `/wizard.html?resume=true`;
+        });
+    }
+
+  } catch (err) {
+    console.error("Failed to fetch onboarding status", err);
+  }
+}
+checkOnboardingStatus();
 
 async function loadAnalytics(email) {
   const data = await apiFetch(`/api/analytics/${email}`);
