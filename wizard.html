@@ -16,18 +16,18 @@
       <span class="dot"></span>
     </div>
 
-    <!-- STEP 1 -->
     <div class="step active">
       <h2>Goal Setup</h2>
       <input id="goal-name" placeholder="Goal (e.g Car Purchase)" />
       <input id="goal-amount" placeholder="Target Amount" type="number" />
       <input id="goal-time" placeholder="Target Time (months)" type="number" />
+
       <div class="controls">
+        <button class="btn ghost" onclick="cancelOnboarding()">Cancel</button>
         <button class="btn primary" onclick="next()">Next</button>
       </div>
     </div>
 
-    <!-- STEP 2 -->
     <div class="step">
       <h2>Financials</h2>
       <input id="income" placeholder="Monthly Income" type="number" />
@@ -36,13 +36,14 @@
       <label>
         <input type="checkbox" id="emergency" /> Emergency Fund?
       </label>
+
       <div class="controls">
         <button class="btn ghost" onclick="prev()">Back</button>
+        <button class="btn ghost" onclick="cancelOnboarding()">Cancel</button>
         <button class="btn primary" onclick="next()">Next</button>
       </div>
     </div>
 
-    <!-- STEP 3 -->
     <div class="step">
       <h2>Investments</h2>
       <select id="risk">
@@ -50,27 +51,31 @@
         <option value="Medium">Medium</option>
         <option value="High">High</option>
       </select>
+
       <select id="mode">
         <option value="SIP">SIP</option>
         <option value="Lumpsum">Lumpsum</option>
       </select>
+
       <input id="invest-amt" placeholder="Investment Amount" type="number" />
+
       <div class="controls">
         <button class="btn ghost" onclick="prev()">Back</button>
+        <button class="btn ghost" onclick="cancelOnboarding()">Cancel</button>
         <button class="btn primary" onclick="next()">Next</button>
       </div>
     </div>
 
-    <!-- STEP 4 -->
     <div class="step">
       <h2>Confirm & Finish</h2>
       <p>We will analyze your finances and build your plan.</p>
+
       <div class="controls">
         <button class="btn ghost" onclick="prev()">Back</button>
+        <button class="btn ghost" onclick="cancelOnboarding()">Cancel</button>
         <button class="btn primary" onclick="submitWizard()">Finish</button>
       </div>
     </div>
-
   </div>
 
   <script type="module" src="./js/wizard.js"></script>

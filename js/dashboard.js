@@ -2,9 +2,6 @@ import { apiFetch } from "./api.js";
 
 console.log("🔥 dashboard.js loaded");
 
-/* =========================
-   MODAL CONTROLS
-========================= */
 function openModal(html) {
   const backdrop = document.getElementById("modal-backdrop");
   const content = document.getElementById("modal-content");
@@ -16,9 +13,6 @@ function closeModal() {
   document.getElementById("modal-backdrop").classList.add("hidden");
 }
 
-/* =========================
-   API LOADERS
-========================= */
 async function loadAnalytics(email) {
   const data = await apiFetch(`/api/analytics/${email}`);
   const a = data.analytics;
@@ -84,10 +78,6 @@ async function loadAgentDecision(email) {
 }
 
 
-
-/* =========================
-   PAGE INIT
-========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -96,13 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Close modal
   document.getElementById("modal-close")?.addEventListener("click", closeModal);
   document.getElementById("modal-backdrop")?.addEventListener("click", e => {
     if (e.target.id === "modal-backdrop") closeModal();
   });
 
-  // Bind buttons ONCE
   document.getElementById("btn-analytics")
     ?.addEventListener("click", () => loadAnalytics(user.email));
 
@@ -112,39 +100,32 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-agent")
     ?.addEventListener("click", () => loadAgentDecision(user.email));
 
-  // Profile
   setText("profile-name", user.Name);
   setText("profile-email", user.email);
   setText("profile-age", user.Age);
   setText("profile-status", user["employement-status"]);
 
-  // Goal
   setText("goal-name", user.Goal?.goal);
   setText("goal-amount", extract(user.Goal?.["target-amt"]));
   setText("goal-time", extract(user.Goal?.["target-time"]));
 
-  // Financials
   setText("income", extract(user.financials?.["monthly-income"]));
   setText("expenses", extract(user.financials?.["monthly-expenses"]));
   setText("savings", user.financials?.monthly_savings);
   setText("debt", extract(user.financials?.debt));
   setText("emergency", user.financials?.["em-fund-opted"] ? "Yes" : "No");
 
-  // Investments
   setText("risk", user.investments?.["risk-opt"]);
   setText("mode", user.investments?.["prefered-mode"]);
   setText("invest-amt", extract(user.investments?.["invest-amt"]));
 
-  // Progress
   setText("ror", extract(user.progress?.ROR) + "%");
   setText("tenure", extract(user.progress?.tenure));
   setText("start-date", user.progress?.start_date);
   setText("auto-adjust", user.progress?.["auto-adjust"] ? "Enabled" : "Disabled");
 });
 
-/* =========================
-   HELPERS
-========================= */
+
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value ?? "-";

@@ -9,6 +9,8 @@ function show() {
   dots.forEach((d, i) => d.classList.toggle("active", i <= step));
 }
 
+show();
+
 window.next = () => {
   if (step < steps.length - 1) {
     step++;
@@ -22,6 +24,30 @@ window.prev = () => {
     show();
   }
 };
+
+window.cancelOnboarding = async () => {
+  const confirmCancel = confirm(
+    "Are you sure you want to cancel onboarding? You can complete it later."
+  );
+
+  if (!confirmCancel) return;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  localStorage.setItem("onboardingCompleted", "false");
+
+  if (user?.email) {
+    apiFetch(`/api/user/${user.email}/onboarding/cancel`, {
+      method: "POST"
+    }).catch(() => {});
+  }
+
+  step = 0;
+  show();
+
+  window.location.href = "/dashboard.html";
+};
+
 
 window.submitWizard = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -63,6 +89,7 @@ window.submitWizard = async () => {
     // reload fresh user
     const updated = await apiFetch(`/api/user/${user.email}`);
     localStorage.setItem("user", JSON.stringify(updated.user));
+    localStorage.setItem("onboardingCompleted", "true");
 
     window.location.href = "/dashboard.html";
 
