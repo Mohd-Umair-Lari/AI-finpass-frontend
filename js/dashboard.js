@@ -19,16 +19,25 @@ async function checkOnboardingStatus() {
   try {
     const res = await apiFetch(`/api/onboarding/status/${user.email}`);
 
-    if (res.status === "cancelled" || res.status === "in_progress") {
-      document.getElementById("resume-onboarding-container").style.display = "block";
+    const onboarding = res.onboarding;
+    if (!onboarding) return;
 
-      document
-        .getElementById("resume-onboarding-btn")
-        .addEventListener("click", () => {
-          window.location.href = `/wizard.html?resume=true`;
-        });
+    if (
+      onboarding.state === "cancelled" ||
+      onboarding.state === "in_progress"
+    ) {
+      const container = document.getElementById("resume-onboarding-container");
+      const btn = document.getElementById("resume-onboarding-btn");
+
+      if (!container || !btn) return;
+
+      container.style.display = "block";
+
+      btn.onclick = () => {
+        console.log("▶️ Resume onboarding clicked");
+        window.location.href = "/wizard.html?resume=true";
+      };
     }
-
   } catch (err) {
     console.error("Failed to fetch onboarding status", err);
   }
